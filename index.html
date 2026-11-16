@@ -1,0 +1,548 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0a4976">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%230a4976' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3 11l9-7 9 7'/%3E%3Cpath d='M5 10v10h14V10'/%3E%3C/svg%3E">
+<title>عقد بيتي — عرض تفاعلي</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Kufi+Arabic:wght@500;600;700&family=Noto+Sans+Arabic:wght@400;500;600&family=Noto+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* Light, government-style palette (close to the Ministry of Justice site: navy + blue on white) */
+:root{
+  --navy:#0a4976; --blue:#176196; --link:#337ab7;
+  --bg:#f4f7fb; --card:#ffffff; --soft:#eef4fa;
+  --ink:#1c2836; --text:#3e4855; --muted:#66727f; --line:#dbe3ec;
+  --gold:#a8822a; --gold-soft:#fbf6ea;
+  --ok:#1d7a4b; --ok-soft:#e9f6ef; --wait:#9a6400; --wait-soft:#fff6e3; --warn:#a33b3b;
+  --f-head:"Noto Kufi Arabic", "Noto Sans Arabic", Tahoma, sans-serif;
+  --f-body:"Noto Sans Arabic", Tahoma, sans-serif;
+  color-scheme: light;
+}
+html[lang="en"]{ --f-head:"Noto Sans", Arial, sans-serif; --f-body:"Noto Sans", Arial, sans-serif; }
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--text);font-family:var(--f-body);font-size:17px;line-height:1.8;-webkit-tap-highlight-color:transparent}
+html[lang="en"] body{line-height:1.65}
+button{touch-action:manipulation;font:inherit}
+h1,h2,h3{font-family:var(--f-head);color:var(--navy);line-height:1.5}
+
+/* National stripe + top strip */
+.stripe{height:4px;background:linear-gradient(to left,#007a3d 0 25%,#ffffff 25% 50%,#ce1126 50% 75%,#000 75% 100%)}
+html[dir="ltr"] .stripe{background:linear-gradient(to right,#007a3d 0 25%,#ffffff 25% 50%,#ce1126 50% 75%,#000 75% 100%)}
+.strip{background:var(--navy);color:#fff}
+.strip .in{max-width:1040px;margin:auto;padding:6px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px;font-size:13.5px}
+.strip .in span{opacity:.92}
+.lang{flex:0 0 auto;min-height:36px;background:#fff;color:var(--navy);border:0;border-radius:6px;padding:4px 14px;font-weight:600;cursor:pointer}
+.lang:focus-visible,button:focus-visible{outline:3px solid #f2b705;outline-offset:2px}
+
+/* Header */
+header.site{background:var(--card);border-bottom:1px solid var(--line)}
+header.site .in{max-width:1040px;margin:auto;padding:18px 16px;display:flex;align-items:center;gap:16px}
+.mark{flex:0 0 auto;width:52px;height:52px;border-radius:12px;background:var(--soft);border:1px solid var(--line);display:grid;place-items:center}
+.mark svg{width:30px;height:30px}
+.titles{flex:1 1 auto;min-width:0}
+h1{font-size:26px;margin:0}
+.sub{margin:2px 0 0;color:var(--muted);font-size:15px}
+.badge{flex:0 0 auto;align-self:flex-start;background:var(--gold-soft);color:var(--gold);border:1px solid #ecdcb4;border-radius:999px;padding:2px 12px;font-size:13px;font-weight:600;white-space:nowrap}
+
+/* Sticky tab bar */
+.tabbar{position:sticky;top:0;z-index:5;background:var(--card);border-bottom:1px solid var(--line);box-shadow:0 2px 6px rgba(10,73,118,.05)}
+nav.tabs{display:flex;gap:2px;overflow-x:auto;max-width:1040px;margin:auto;padding:0 8px;scrollbar-width:none}
+nav.tabs::-webkit-scrollbar{display:none}
+nav.tabs button{flex:0 0 auto;min-height:52px;border:0;border-bottom:3px solid transparent;background:transparent;color:var(--text);padding:8px 14px;cursor:pointer;font-family:var(--f-head);font-size:15px;font-weight:600}
+nav.tabs button .n{display:inline-grid;place-items:center;width:22px;height:22px;border-radius:50%;background:var(--soft);color:var(--blue);font-size:12px;margin-inline-end:8px;font-family:var(--f-body)}
+nav.tabs button[aria-selected="true"]{color:var(--navy);border-bottom-color:var(--navy)}
+nav.tabs button[aria-selected="true"] .n{background:var(--navy);color:#fff}
+
+/* Content */
+main{max-width:1040px;margin:auto;padding:22px 16px 28px}
+section.panel{display:none;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:28px}
+section.panel.active{display:block;animation:fade .25s ease-out}
+@keyframes fade{from{opacity:.001;transform:translateY(6px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){section.panel.active{animation:none}.bar > i{transition:none}}
+h2{font-size:22px;margin:0 0 6px;padding-bottom:10px;border-bottom:1px solid var(--line);position:relative}
+h2::after{content:"";position:absolute;bottom:-1px;inset-inline-start:0;width:64px;height:3px;background:var(--gold)}
+h3{font-size:17px;margin:0 0 6px}
+p{margin:12px 0}
+.note{background:var(--soft);border-inline-start:4px solid var(--blue);border-radius:6px;padding:10px 14px;margin:14px 0;color:var(--ink)}
+.warn{background:#fdf1f1;border-inline-start:4px solid var(--warn);border-radius:6px;padding:10px 14px;color:var(--warn);font-weight:600}
+.grid{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));margin:16px 0}
+.stat{border:1px solid var(--line);border-radius:8px;padding:14px;text-align:center;background:var(--card)}
+.stat b{display:block;font-family:var(--f-head);font-size:26px;color:var(--navy);line-height:1.4}
+.stat span{color:var(--muted);font-size:14.5px}
+.q b{width:40px;height:40px;margin:0 auto 4px;border-radius:50%;background:var(--soft);display:grid;place-items:center;font-size:20px}
+.actions{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
+button.action{background:var(--navy);color:#fff;border:1px solid var(--navy);border-radius:6px;padding:10px 18px;min-height:46px;font-weight:600;cursor:pointer}
+button.action.ghost{background:#fff;color:var(--navy)}
+button.action:disabled{opacity:.4;cursor:not-allowed}
+.table-wrap{overflow-x:auto;margin-top:12px;border:1px solid var(--line);border-radius:8px}
+table{width:100%;border-collapse:collapse;font-size:15px}
+th,td{padding:10px 12px;border-bottom:1px solid var(--line);text-align:start;vertical-align:top}
+tr:last-child td{border-bottom:0}
+th{background:var(--soft);color:var(--navy);font-weight:600;font-family:var(--f-head);font-size:14px}
+.chip{display:inline-block;border-radius:999px;padding:1px 10px;font-size:13px;font-weight:600;white-space:nowrap}
+.chip.ok{background:var(--ok-soft);color:var(--ok)}
+.chip.wait{background:var(--wait-soft);color:var(--wait)}
+.chip.info{background:var(--soft);color:var(--blue)}
+.num{font-variant-numeric:tabular-nums;white-space:nowrap}
+.bar{height:12px;background:var(--soft);border:1px solid var(--line);border-radius:99px;overflow:hidden;margin:12px 0 6px}
+.bar > i{display:block;height:100%;background:var(--blue);width:0;transition:width .5s}
+.paid{margin:4px 0 0}
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:14px 0}
+.step{border:1px solid var(--line);border-top:3px solid var(--line);border-radius:8px;padding:12px 10px;text-align:center;cursor:pointer;background:var(--card);color:var(--ink);font-family:var(--f-head);font-weight:600;font-size:15px;min-height:76px}
+.step small{display:block;color:var(--muted);font-family:var(--f-body);font-weight:400;font-size:13.5px}
+.step.on{border-color:var(--navy);border-top-color:var(--gold);background:var(--soft)}
+.two{display:grid;gap:16px;grid-template-columns:1fr 1fr;margin:16px 0}
+.box{border:1px solid var(--line);border-radius:8px;padding:16px}
+.box.yes{border-top:3px solid var(--ok)}
+.box.no{border-top:3px solid var(--warn)}
+ul.clean{margin:0;padding-inline-start:20px}
+ul.clean li{margin:6px 0}
+
+/* Pager */
+.pager{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:18px}
+.pager button{min-height:48px;min-width:120px;border-radius:6px;border:1px solid var(--navy);background:#fff;color:var(--navy);font-weight:600;cursor:pointer;padding:8px 16px}
+.pager button.next{background:var(--navy);color:#fff}
+.pager button:disabled{opacity:.35;cursor:not-allowed}
+.dots{display:flex;gap:6px}
+.dots i{width:8px;height:8px;border-radius:50%;background:var(--line)}
+.dots i.on{background:var(--navy);width:22px;border-radius:99px}
+
+footer{max-width:1040px;margin:auto;padding:0 16px 28px;padding-bottom:max(28px, env(safe-area-inset-bottom));color:var(--muted);font-size:13.5px;text-align:center}
+
+.toast{position:fixed;bottom:max(16px, env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);width:max-content;max-width:calc(100% - 32px);text-align:center;background:var(--ink);color:#fff;padding:10px 16px;border-radius:8px;opacity:0;transition:opacity .3s;pointer-events:none;z-index:10;font-size:15px}
+.toast.show{opacity:1}
+
+@media (hover:hover){
+  nav.tabs button:hover{color:var(--navy);background:var(--soft)}
+  button.action:hover{background:var(--blue);border-color:var(--blue)}
+  button.action.ghost:hover{background:var(--soft);color:var(--navy)}
+  .step:hover{border-color:var(--blue)}
+  .pager button:hover:not(:disabled){filter:brightness(1.08)}
+}
+@media (min-width:900px){
+  body{font-size:18px}
+  h1{font-size:30px}
+  section.panel{padding:34px 40px}
+}
+/* Tablets */
+@media (max-width:820px){
+  .steps{grid-template-columns:1fr 1fr}
+}
+/* Phones */
+@media (max-width:600px){
+  body{font-size:16.5px}
+  .strip .in{font-size:12.5px}
+  header.site .in{padding:14px 16px;gap:12px}
+  .mark{width:44px;height:44px}
+  h1{font-size:22px}
+  .sub{font-size:13.5px}
+  .badge{display:none}
+  nav.tabs button{padding:8px 10px;font-size:14px}
+  main{padding:14px 12px 20px}
+  section.panel{padding:20px 16px}
+  h2{font-size:19px}
+  .two{grid-template-columns:1fr;gap:12px}
+  .grid{grid-template-columns:1fr;gap:8px}
+  .stat{display:flex;align-items:center;gap:12px;text-align:start;padding:10px 12px}
+  .q b{margin:0;flex:0 0 auto}
+  #p4 .grid{grid-template-columns:1fr 1fr}
+  #p4 .stat{flex-direction:column;text-align:center;gap:0}
+  #p4 .stat:last-child{grid-column:1 / -1}
+  .actions button{flex:1 1 100%}
+  .step{min-height:0}
+  table{font-size:14px}
+  th,td{padding:8px 8px}
+  .chip{white-space:normal;line-height:1.5;padding:2px 8px}
+  .pager button{min-width:100px}
+}
+</style>
+</head>
+<body>
+<div class="stripe" aria-hidden="true"></div>
+<div class="strip">
+  <div class="in">
+    <span data-i18n="strip"></span>
+    <button class="lang" id="langBtn" type="button"></button>
+  </div>
+</div>
+<header class="site">
+  <div class="in">
+    <div class="mark" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#0a4976" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/><path d="M9 20v-5h6v5"/></svg>
+    </div>
+    <div class="titles">
+      <h1 data-i18n="title"></h1>
+      <p class="sub" data-i18n="sub"></p>
+    </div>
+    <span class="badge" data-i18n="badge"></span>
+  </div>
+</header>
+<div class="tabbar">
+  <nav class="tabs" role="tablist" id="tabs">
+    <button role="tab" aria-selected="true" data-p="p1"><span class="n">1</span><span data-i18n="t1"></span></button>
+    <button role="tab" aria-selected="false" data-p="p2"><span class="n">2</span><span data-i18n="t2"></span></button>
+    <button role="tab" aria-selected="false" data-p="p3"><span class="n">3</span><span data-i18n="t3"></span></button>
+    <button role="tab" aria-selected="false" data-p="p4"><span class="n">4</span><span data-i18n="t4"></span></button>
+    <button role="tab" aria-selected="false" data-p="p5"><span class="n">5</span><span data-i18n="t5"></span></button>
+    <button role="tab" aria-selected="false" data-p="p6"><span class="n">6</span><span data-i18n="t6"></span></button>
+  </nav>
+</div>
+
+<main id="main">
+
+<section class="panel active" id="p1">
+  <h2 data-i18n="p1h"></h2>
+  <p data-i18n="p1t"></p>
+  <div class="grid">
+    <div class="stat q"><b>؟</b><span data-i18n="q1"></span></div>
+    <div class="stat q"><b>؟</b><span data-i18n="q2"></span></div>
+    <div class="stat q"><b>؟</b><span data-i18n="q3"></span></div>
+  </div>
+  <p class="note" data-i18n="p1n"></p>
+</section>
+
+<section class="panel" id="p2">
+  <h2 data-i18n="p2h"></h2>
+  <p data-i18n="p2t"></p>
+  <div class="steps" id="flow">
+    <button class="step on" data-i="0"><span data-i18n="s1"></span><small data-i18n="s1s"></small></button>
+    <button class="step" data-i="1"><span data-i18n="s2"></span><small data-i18n="s2s"></small></button>
+    <button class="step" data-i="2"><span data-i18n="s3"></span><small data-i18n="s3s"></small></button>
+    <button class="step" data-i="3"><span data-i18n="s4"></span><small data-i18n="s4s"></small></button>
+  </div>
+  <p class="note" id="flowText"></p>
+  <p class="warn" data-i18n="p2w"></p>
+</section>
+
+<section class="panel" id="p3">
+  <h2 data-i18n="p3h"></h2>
+  <p data-i18n="p3t"></p>
+  <div class="actions">
+    <button class="action" id="payBtn" data-i18n="pay"></button>
+    <button class="action ghost" id="resetBtn" data-i18n="reset"></button>
+  </div>
+  <div class="bar"><i id="barFill"></i></div>
+  <p class="paid" id="paidLine"></p>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th data-i18n="thDate"></th><th data-i18n="thItem"></th><th data-i18n="thAmt"></th><th data-i18n="thSt"></th></tr></thead>
+      <tbody id="ledger"></tbody>
+    </table>
+  </div>
+  <p class="note" data-i18n="demoNote"></p>
+</section>
+
+<section class="panel" id="p4">
+  <h2 data-i18n="p4h"></h2>
+  <p data-i18n="p4t"></p>
+  <div class="grid">
+    <div class="stat"><b id="cVal" class="num"></b><span data-i18n="cValL"></span></div>
+    <div class="stat"><b id="cDays" class="num"></b><span data-i18n="cDaysL"></span></div>
+    <div class="stat"><b id="cStatus"></b><span data-i18n="cStL"></span></div>
+  </div>
+  <div class="actions">
+    <button class="action" id="chgAdd" data-i18n="chgAdd"></button>
+    <button class="action" id="chgOwner" data-i18n="chgOwner"></button>
+    <button class="action" id="chgContr" data-i18n="chgContr"></button>
+    <button class="action ghost" id="chgReset" data-i18n="reset"></button>
+  </div>
+  <p class="note" id="chgNote"></p>
+  <p class="note" data-i18n="demoNote"></p>
+</section>
+
+<section class="panel" id="p5">
+  <h2 data-i18n="p5h"></h2>
+  <p data-i18n="p5t"></p>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th data-i18n="thDate"></th><th data-i18n="thFrom"></th><th data-i18n="thType"></th><th data-i18n="thSt"></th></tr></thead>
+      <tbody>
+        <tr><td class="num">01/03</td><td data-i18n="contractor"></td><td data-i18n="n1"></td><td><span class="chip info" data-i18n="sent"></span></td></tr>
+        <tr><td class="num">08/03</td><td data-i18n="owner"></td><td data-i18n="n2"></td><td><span class="chip info" data-i18n="logged"></span></td></tr>
+        <tr><td class="num">15/03</td><td data-i18n="contractor"></td><td data-i18n="n3"></td><td><span class="chip wait" data-i18n="awaiting"></span></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="note" data-i18n="p5n"></p>
+</section>
+
+<section class="panel" id="p6">
+  <h2 data-i18n="p6h"></h2>
+  <div class="two">
+    <div class="box yes">
+      <h3 data-i18n="inH"></h3>
+      <ul class="clean"><li data-i18n="in1"></li><li data-i18n="in2"></li><li data-i18n="in3"></li><li data-i18n="in4"></li></ul>
+    </div>
+    <div class="box no">
+      <h3 data-i18n="outH"></h3>
+      <ul class="clean"><li data-i18n="out1"></li><li data-i18n="out2"></li><li data-i18n="out3"></li><li data-i18n="out4"></li></ul>
+    </div>
+  </div>
+  <p class="note" data-i18n="p6n"></p>
+</section>
+
+<div class="pager">
+  <button id="prevBtn" type="button"></button>
+  <div class="dots" id="dots" aria-hidden="true"></div>
+  <button id="nextBtn" class="next" type="button"></button>
+</div>
+</main>
+
+<footer data-i18n="footer"></footer>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(function(){
+  /* ---------- Text in both languages ---------- */
+  var T = {
+    ar: {
+      docTitle:'عقد بيتي — عرض تفاعلي',
+      langBtn:'English', langLabel:'Switch to English',
+      strip:'مقترح مقدَّم إلى الإدارة العامة للخبراء بوزارة العدل — دولة الكويت',
+      title:'عقد بيتي',
+      sub:'منصة مقترحة لتوثيق العلاقة التعاقدية بين المالك والمقاول في بناء السكن الخاص',
+      badge:'نموذج توضيحي',
+      t1:'المشكلة', t2:'آلية العمل', t3:'السجل المشترك', t4:'تعديل الأعمال', t5:'الإخطارات', t6:'نطاق المقترح',
+      p1h:'لماذا هذا المقترح؟',
+      p1t:'تمتد عقود بناء السكن الخاص لفترات طويلة، وتتغير خلالها الأعمال والدفعات. وكثيراً ما تتوزع المستندات بين تطبيقات المراسلة والإيصالات والاتفاقات الشفهية، فإذا نشأ خلاف احتاجت المحكمة وأهل الخبرة إلى مستندات موحدة ومؤرخة.',
+      q1:'من وافق على تعديل الكميات؟', q2:'متى سُدِّدت الدفعة الثالثة؟', q3:'هل أُرسل إخطار التأخير؟',
+      p1n:'الهدف: توثيق الإجابة عن هذه الأسئلة في سجل واحد يطّلع عليه الطرفان، مع تاريخ كل إجراء وأثره.',
+      p2h:'آلية عمل المنصة',
+      p2t:'اختر إحدى المراحل للاطلاع على تفاصيلها:',
+      s1:'عقد إلكتروني نموذجي', s1s:'يعتمده الطرفان',
+      s2:'سجل مشترك', s2s:'الدفعات والأعمال والتعديلات',
+      s3:'الإخطارات والاعتراضات', s3s:'مؤرخة',
+      s4:'ملف لأعمال الخبرة', s4s:'عند الحاجة',
+      flow:[
+        'العقد الإلكتروني النموذجي: بنود يتفق عليها الطرفان مسبقاً، تشمل المدة وقيمة العقد وطريقة السداد وجدول الأعمال، ولا تُعدَّل إلا باتفاقهما.',
+        'السجل المشترك: تُقيَّد فيه كل دفعة وكل عمل مُنجَز وكل تعديل وكل إخطار بتاريخه، ويطّلع الطرفان على النسخة ذاتها.',
+        'الإخطارات والاعتراضات: تُرسَل مؤرخة، ويبقى عدم الرد مقيداً كما هو دون أن يُعدّ إقراراً تلقائياً.',
+        'ملف لأعمال الخبرة: عند النزاع يُستخرَج السجل بتواريخه ليستعين به أهل الخبرة. والمنصة لا تفصل في النزاع، وإنما توفر المستندات.'
+      ],
+      p2w:'تنبيه: المنصة لا تغني عن التوقيع أو التوثيق المطلوب قانوناً، وتخضع حجيتها القانونية للدراسة والموافقات اللازمة.',
+      p3h:'السجل المشترك للدفعات',
+      p3t:'تُقيَّد كل دفعة بتاريخها، ولا تُعتمد إلا بعد تأكيد الطرفين. جرّب إضافة دفعة:',
+      pay:'إضافة دفعة بقيمة 10,000 د.ك', reset:'إعادة الضبط',
+      paidLine:'المسدَّد: <b class="num">{p}</b> د.ك من أصل <b class="num">{t}</b> د.ك — المتبقي: <b class="num">{r}</b> د.ك',
+      thDate:'التاريخ', thItem:'البيان', thAmt:'المبلغ (د.ك)', thSt:'الحالة', thFrom:'المُرسِل', thType:'نوع الإخطار',
+      firstPay:'دفعة مقدمة', stagePay:'دفعة المرحلة {n}',
+      okBoth:'مؤكدة من الطرفين', pendRecv:'بانتظار تأكيد المقاول للاستلام',
+      toastPay:'أُضيفت الدفعة، وهي بانتظار تأكيد المقاول للاستلام.',
+      demoNote:'الأرقام افتراضية لأغراض التوضيح فقط.',
+      p4h:'تعديل الأعمال وأثره على القيمة والمدة',
+      p4t:'يطلب المالك عملاً إضافياً (مثل تركيب تكييف مركزي)، فيقدّر المقاول أثره على القيمة والمدة، ثم يوافق الطرفان أو يعترضان، ويُقيَّد ذلك كله في السجل.',
+      cValL:'قيمة العقد (د.ك)', cDaysL:'مدة العقد (يوم)', cStL:'حالة التعديل',
+      chgAdd:'طلب تعديل: 5,000 د.ك و20 يوماً إضافية', chgOwner:'موافقة المالك', chgContr:'موافقة المقاول',
+      stNone:'لا يوجد تعديل', stPend:'بانتظار الموافقة', stOk:'نافذ',
+      chgNone:'لا يسري التعديل إلا بموافقة الطرفين، ولا يُحتسب التعديل غير المعتمد.',
+      chgPend:'الموافقات: المالك {o} — المقاول {c}. يسري التعديل عند موافقة الطرفين.',
+      chgOk:'اعتمد الطرفان التعديل، وحُدِّثت قيمة العقد ومدته في السجل.',
+      yes:'✓', no:'—',
+      toastChg:'اعتمد الطرفان التعديل.',
+      p5h:'الإخطارات: عدم الرد لا يُعدّ موافقة',
+      p5t:'يرسل كل طرف إخطاراً مؤرخاً، ويرد الطرف الآخر أو يعترض خلال المدة المتفق عليها. ويبقى عدم الرد مقيداً كما هو، دون أن يُعدّ إقراراً تلقائياً.',
+      contractor:'المقاول', owner:'المالك',
+      n1:'إخطار بتأخر توريد المواد', n2:'اعتراض على الجدول الزمني', n3:'طلب الموافقة على مادة بديلة',
+      sent:'مُرسَل', logged:'مُقيَّد', awaiting:'بانتظار الرد',
+      p5n:'تبقى حالة «بانتظار الرد» ظاهرة إلى أن يرد الطرف الآخر أو تنقضي المدة المتفق عليها.',
+      p6h:'نطاق المقترح وحدوده',
+      inH:'يشمل المقترح',
+      in1:'سجلاً مؤرخاً للدفعات والأعمال والتعديلات والإخطارات', in2:'عقداً إلكترونياً نموذجياً يعتمده الطرفان', in3:'الحد من الخلافات وتيسير جمع المستندات لأعمال الخبرة', in4:'إطلاقاً تجريبياً اختيارياً ومجانياً',
+      outH:'لا يشمل المقترح',
+      out1:'إدارة المشاريع الهندسية', out2:'تحديد المسؤولية تلقائياً', out3:'منح حجية قانونية بمجرد الاستخدام', out4:'أي اعتماد رسمي من الجهات الحكومية حتى الآن',
+      p6n:'تخضع الحجية القانونية، والربط مع تطبيق «هويتي» ومنصة «سهل» والجهات المعنية بتراخيص البناء، للدراسة والموافقات اللازمة.',
+      prev:'→ السابق', next:'التالي ←',
+      footer:'نموذج توضيحي لأغراض العرض فقط، وليس موقعاً حكومياً رسمياً. جميع الأرقام الواردة افتراضية.'
+    },
+    en: {
+      docTitle:'Aqd Baiti — Interactive Overview',
+      langBtn:'العربية', langLabel:'التحويل إلى العربية',
+      strip:'A proposal submitted to the General Department of Experts, Ministry of Justice — State of Kuwait',
+      title:'Aqd Baiti (My Home Contract)',
+      sub:'A proposed platform for documenting the contractual relationship between owners and contractors in private housing construction',
+      badge:'Illustrative prototype',
+      t1:'The Problem', t2:'How It Works', t3:'Shared Record', t4:'Variations', t5:'Notices', t6:'Scope',
+      p1h:'Why this proposal?',
+      p1t:'Private housing construction contracts run for long periods, during which the works and payments change. Documents are often scattered across messaging apps, receipts and verbal agreements, so when a dispute arises the court and the experts need a single, dated set of records.',
+      q1:'Who approved the change in quantities?', q2:'When was the third payment made?', q3:'Was the delay notice sent?',
+      p1n:'The aim: record the answers to these questions in one register that both parties can see, with the date and effect of every action.',
+      p2h:'How the platform works',
+      p2t:'Select a stage to see its details:',
+      s1:'Standard e-contract', s1s:'Approved by both parties',
+      s2:'Shared record', s2s:'Payments, works and variations',
+      s3:'Notices and objections', s3s:'Date-stamped',
+      s4:'File for expert review', s4s:'When needed',
+      flow:[
+        'Standard e-contract: terms agreed by both parties in advance, covering duration, contract value, payment method and works schedule. They can be changed only by mutual agreement.',
+        'Shared record: every payment, completed work, variation and notice is logged with its date, and both parties see the same version.',
+        'Notices and objections: they are sent with a date stamp. A lack of response stays on record as it is and is not treated as automatic acceptance.',
+        'File for expert review: in a dispute, the dated record can be exported for the experts to use. The platform does not decide disputes; it only provides the documents.'
+      ],
+      p2w:'Note: the platform does not replace any signature or notarisation required by law. Its legal standing is subject to study and the necessary approvals.',
+      p3h:'Shared payment record',
+      p3t:'Each payment is logged with its date and counts only once both parties confirm it. Try adding a payment:',
+      pay:'Add a KWD 10,000 payment', reset:'Reset',
+      paidLine:'Paid: KWD <b class="num">{p}</b> of KWD <b class="num">{t}</b> — Remaining: KWD <b class="num">{r}</b>',
+      thDate:'Date', thItem:'Description', thAmt:'Amount (KWD)', thSt:'Status', thFrom:'Sender', thType:'Notice type',
+      firstPay:'Advance payment', stagePay:'Stage {n} payment',
+      okBoth:'Confirmed by both parties', pendRecv:'Awaiting contractor’s receipt confirmation',
+      toastPay:'Payment added. Awaiting the contractor’s confirmation of receipt.',
+      demoNote:'All figures are hypothetical and for illustration only.',
+      p4h:'Variations and their effect on value and duration',
+      p4t:'The owner requests additional work (for example, central air-conditioning). The contractor estimates its effect on value and duration, then both parties approve or object, and every step is logged.',
+      cValL:'Contract value (KWD)', cDaysL:'Contract duration (days)', cStL:'Variation status',
+      chgAdd:'Request variation: +KWD 5,000 and +20 days', chgOwner:'Owner approves', chgContr:'Contractor approves',
+      stNone:'No variation', stPend:'Awaiting approval', stOk:'In effect',
+      chgNone:'A variation takes effect only when both parties approve it. Unapproved variations are not counted.',
+      chgPend:'Approvals: owner {o} — contractor {c}. The variation takes effect once both parties approve.',
+      chgOk:'Both parties approved the variation, and the contract value and duration have been updated in the record.',
+      yes:'✓', no:'—',
+      toastChg:'Both parties approved the variation.',
+      p5h:'Notices: no response is not acceptance',
+      p5t:'Each party sends a dated notice, and the other party responds or objects within the agreed period. A lack of response stays on record as it is and is not treated as automatic acceptance.',
+      contractor:'Contractor', owner:'Owner',
+      n1:'Notice of delayed material supply', n2:'Objection to the schedule', n3:'Request to approve a substitute material',
+      sent:'Sent', logged:'Logged', awaiting:'Awaiting response',
+      p5n:'The “Awaiting response” status remains visible until the other party responds or the agreed period ends.',
+      p6h:'Scope and limits of the proposal',
+      inH:'The proposal covers',
+      in1:'A dated record of payments, works, variations and notices', in2:'A standard e-contract approved by both parties', in3:'Fewer disputes and easier document gathering for expert review', in4:'A free, optional pilot launch',
+      outH:'The proposal does not cover',
+      out1:'Engineering project management', out2:'Automatic assignment of liability', out3:'Legal standing simply by being used', out4:'Any official government endorsement to date',
+      p6n:'Legal standing, and integration with the Hawiti app, the Sahel platform and the building-permit authorities, are subject to study and the necessary approvals.',
+      prev:'← Previous', next:'Next →',
+      footer:'An illustrative prototype for presentation purposes only; not an official government website. All figures are hypothetical.'
+    }
+  };
+
+  var lang = 'ar';
+  try { var saved = localStorage.getItem('aqd-lang'); if (saved === 'en' || saved === 'ar') lang = saved; } catch(e){}
+  function t(k){ return T[lang][k]; }
+  function fmt(x){ return x.toLocaleString('en-US'); }
+  function fill(s, o){ return s.replace(/\{(\w+)\}/g, function(_, k){ return o[k]; }); }
+
+  /* ---------- Tabs and pager ---------- */
+  var tabs=[].slice.call(document.querySelectorAll('#tabs button'));
+  var order=tabs.map(function(b){return b.dataset.p});
+  var cur=0;
+  var dots=document.getElementById('dots');
+  order.forEach(function(){dots.appendChild(document.createElement('i'))});
+  var prevBtn=document.getElementById('prevBtn'), nextBtn=document.getElementById('nextBtn');
+  function show(id, scroll){
+    cur=order.indexOf(id);
+    document.querySelectorAll('section.panel').forEach(function(s){s.classList.toggle('active', s.id===id)});
+    tabs.forEach(function(b){b.setAttribute('aria-selected', b.dataset.p===id?'true':'false')});
+    [].forEach.call(dots.children,function(d,i){d.classList.toggle('on', i===cur)});
+    prevBtn.disabled = cur===0;
+    nextBtn.disabled = cur===order.length-1;
+    var bar=document.getElementById('tabs'), b=tabs[cur];
+    var bl=bar.getBoundingClientRect(), tl=b.getBoundingClientRect();
+    if(tl.left<bl.left || tl.right>bl.right){ bar.scrollLeft += (tl.left+tl.width/2) - (bl.left+bl.width/2); }
+    if(scroll){
+      var main=document.getElementById('main');
+      var barH=document.querySelector('.tabbar').offsetHeight;
+      var top=main.getBoundingClientRect().top + window.pageYOffset - barH;
+      if(window.pageYOffset > top) window.scrollTo({top:top, behavior:'smooth'});
+    }
+  }
+  tabs.forEach(function(b){b.addEventListener('click',function(){show(b.dataset.p, true)})});
+  prevBtn.addEventListener('click',function(){ if(cur>0) show(order[cur-1], true) });
+  nextBtn.addEventListener('click',function(){ if(cur<order.length-1) show(order[cur+1], true) });
+  document.addEventListener('keydown',function(e){
+    var fwd = lang==='ar' ? 'ArrowLeft' : 'ArrowRight';
+    var back = lang==='ar' ? 'ArrowRight' : 'ArrowLeft';
+    if(e.key===fwd && cur<order.length-1) show(order[cur+1], true);
+    if(e.key===back && cur>0) show(order[cur-1], true);
+  });
+
+  /* ---------- Toast ---------- */
+  var toastEl=document.getElementById('toast'), tt;
+  function toast(msg){toastEl.textContent=msg;toastEl.classList.add('show');clearTimeout(tt);tt=setTimeout(function(){toastEl.classList.remove('show')},2200)}
+
+  /* ---------- How it works ---------- */
+  var flowIdx=0;
+  document.querySelectorAll('#flow .step').forEach(function(b){
+    b.addEventListener('click',function(){
+      document.querySelectorAll('#flow .step').forEach(function(x){x.classList.remove('on')});
+      b.classList.add('on'); flowIdx=+b.dataset.i; renderFlow();
+    });
+  });
+  function renderFlow(){ document.getElementById('flowText').textContent=t('flow')[flowIdx]; }
+
+  /* ---------- Payment record ---------- */
+  var TOTAL=80000, paid=20000, stages=0;
+  var log=[{d:'01/10', first:true, a:20000, ok:true}];
+  function renderLedger(){
+    document.getElementById('paidLine').innerHTML=fill(t('paidLine'),{p:fmt(paid),t:fmt(TOTAL),r:fmt(TOTAL-paid)});
+    document.getElementById('barFill').style.width=(paid/TOTAL*100)+'%';
+    var tb=document.getElementById('ledger'); tb.innerHTML='';
+    log.forEach(function(r){
+      var tr=document.createElement('tr');
+      var item = r.first ? t('firstPay') : fill(t('stagePay'),{n:r.n});
+      tr.innerHTML='<td class="num">'+r.d+'</td><td>'+item+'</td><td class="num">'+fmt(r.a)+'</td><td><span class="chip '+(r.ok?'ok':'wait')+'">'+(r.ok?t('okBoth'):t('pendRecv'))+'</span></td>';
+      tb.appendChild(tr);
+    });
+    document.getElementById('payBtn').disabled = paid>=TOTAL;
+  }
+  document.getElementById('payBtn').addEventListener('click',function(){
+    if(paid>=TOTAL) return;
+    stages++; paid+=10000;
+    log.push({d:(stages<9?'0':'')+(stages+1)+'/11', n:stages, a:10000, ok:false});
+    renderLedger(); toast(t('toastPay'));
+  });
+  document.getElementById('resetBtn').addEventListener('click',function(){
+    paid=20000; stages=0; log=[{d:'01/10', first:true, a:20000, ok:true}]; renderLedger();
+  });
+
+  /* ---------- Variations ---------- */
+  var val=80000, days=365, state='none', ownerOk=false, contrOk=false;
+  var addBtn=document.getElementById('chgAdd'), ownBtn=document.getElementById('chgOwner'), conBtn=document.getElementById('chgContr');
+  function renderChg(){
+    document.getElementById('cVal').textContent=fmt(val);
+    document.getElementById('cDays').textContent=days;
+    document.getElementById('cStatus').textContent= state==='none'?t('stNone'): state==='pending'?t('stPend'):t('stOk');
+    var note=document.getElementById('chgNote');
+    if(state==='pending') note.textContent=fill(t('chgPend'),{o:ownerOk?t('yes'):t('no'), c:contrOk?t('yes'):t('no')});
+    else if(state==='ok') note.textContent=t('chgOk');
+    else note.textContent=t('chgNone');
+    addBtn.disabled = state!=='none';
+    ownBtn.disabled = state!=='pending' || ownerOk;
+    conBtn.disabled = state!=='pending' || contrOk;
+  }
+  function tryFinish(){
+    if(ownerOk && contrOk && state==='pending'){ state='ok'; val=85000; days=385; renderChg(); toast(t('toastChg')); }
+  }
+  addBtn.addEventListener('click',function(){state='pending';ownerOk=false;contrOk=false;renderChg();});
+  ownBtn.addEventListener('click',function(){ if(state==='pending'){ownerOk=true;renderChg();tryFinish();} });
+  conBtn.addEventListener('click',function(){ if(state==='pending'){contrOk=true;renderChg();tryFinish();} });
+  document.getElementById('chgReset').addEventListener('click',function(){val=80000;days=365;state='none';ownerOk=false;contrOk=false;renderChg();});
+
+  /* ---------- Language ---------- */
+  var langBtn=document.getElementById('langBtn');
+  function applyLang(){
+    var root=document.documentElement;
+    root.lang=lang; root.dir= lang==='ar'?'rtl':'ltr';
+    document.title=t('docTitle');
+    document.querySelectorAll('[data-i18n]').forEach(function(el){ el.textContent=t(el.dataset.i18n); });
+    document.querySelectorAll('.q b').forEach(function(b){ b.textContent= lang==='ar'?'؟':'?'; });
+    langBtn.textContent=t('langBtn'); langBtn.setAttribute('aria-label', t('langLabel'));
+    langBtn.lang = lang==='ar'?'en':'ar';
+    prevBtn.textContent=t('prev'); nextBtn.textContent=t('next');
+    renderFlow(); renderLedger(); renderChg();
+    show(order[cur], false);
+  }
+  langBtn.addEventListener('click',function(){
+    lang = lang==='ar'?'en':'ar';
+    try { localStorage.setItem('aqd-lang', lang); } catch(e){}
+    applyLang();
+  });
+
+  applyLang();
+})();
+</script>
+</body>
+</html>
