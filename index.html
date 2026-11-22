@@ -99,6 +99,7 @@ th{background:var(--soft);color:var(--navy);font-weight:600;font-family:var(--f-
 .box{border:1px solid var(--line);border-radius:8px;padding:16px}
 .box.yes{border-top:3px solid var(--ok)}
 .box.no{border-top:3px solid var(--warn)}
+.box.todo{border-top:3px solid var(--gold)}
 ul.clean{margin:0;padding-inline-start:20px}
 ul.clean li{margin:6px 0}
 
@@ -188,7 +189,8 @@ footer{max-width:1040px;margin:auto;padding:0 16px 28px;padding-bottom:max(28px,
     <button role="tab" aria-selected="false" data-p="p3"><span class="n">3</span><span data-i18n="t3"></span></button>
     <button role="tab" aria-selected="false" data-p="p4"><span class="n">4</span><span data-i18n="t4"></span></button>
     <button role="tab" aria-selected="false" data-p="p5"><span class="n">5</span><span data-i18n="t5"></span></button>
-    <button role="tab" aria-selected="false" data-p="p6"><span class="n">6</span><span data-i18n="t6"></span></button>
+    <button role="tab" aria-selected="false" data-p="psign"><span class="n">6</span><span data-i18n="tsg"></span></button>
+    <button role="tab" aria-selected="false" data-p="p6"><span class="n">7</span><span data-i18n="t6"></span></button>
   </nav>
 </div>
 
@@ -270,12 +272,35 @@ footer{max-width:1040px;margin:auto;padding:0 16px 28px;padding-bottom:max(28px,
   <p class="note" data-i18n="p5n"></p>
 </section>
 
+<section class="panel" id="psign">
+  <h2 data-i18n="sgh"></h2>
+  <p data-i18n="sgt"></p>
+  <div class="steps" id="sign">
+    <button class="step on" data-i="0"><span data-i18n="g1"></span><small data-i18n="g1s"></small></button>
+    <button class="step" data-i="1"><span data-i18n="g2"></span><small data-i18n="g2s"></small></button>
+    <button class="step" data-i="2"><span data-i18n="g3"></span><small data-i18n="g3s"></small></button>
+    <button class="step" data-i="3"><span data-i18n="g4"></span><small data-i18n="g4s"></small></button>
+  </div>
+  <p class="note" id="signText"></p>
+  <div class="two">
+    <div class="box yes">
+      <h3 data-i18n="baseH"></h3>
+      <ul class="clean"><li data-i18n="base1"></li><li data-i18n="base2"></li><li data-i18n="base3"></li><li data-i18n="base4"></li></ul>
+    </div>
+    <div class="box todo">
+      <h3 data-i18n="needH"></h3>
+      <ul class="clean"><li data-i18n="need1"></li><li data-i18n="need2"></li><li data-i18n="need3"></li><li data-i18n="need4"></li></ul>
+    </div>
+  </div>
+  <p class="warn" data-i18n="sgw"></p>
+</section>
+
 <section class="panel" id="p6">
   <h2 data-i18n="p6h"></h2>
   <div class="two">
     <div class="box yes">
       <h3 data-i18n="inH"></h3>
-      <ul class="clean"><li data-i18n="in1"></li><li data-i18n="in2"></li><li data-i18n="in3"></li><li data-i18n="in4"></li></ul>
+      <ul class="clean"><li data-i18n="in1"></li><li data-i18n="in2"></li><li data-i18n="in3"></li><li data-i18n="in4"></li><li data-i18n="in5"></li></ul>
     </div>
     <div class="box no">
       <h3 data-i18n="outH"></h3>
@@ -306,7 +331,7 @@ footer{max-width:1040px;margin:auto;padding:0 16px 28px;padding-bottom:max(28px,
       title:'عقد بيتي',
       sub:'منصة مقترحة لتوثيق العلاقة التعاقدية بين المالك والمقاول في بناء السكن الخاص',
       badge:'نموذج توضيحي',
-      t1:'المشكلة', t2:'آلية العمل', t3:'السجل المشترك', t4:'تعديل الأعمال', t5:'الإخطارات', t6:'نطاق المقترح',
+      t1:'المشكلة', t2:'آلية العمل', t3:'السجل المشترك', t4:'تعديل الأعمال', t5:'الإخطارات', t6:'نطاق المقترح', tsg:'التوقيع والربط',
       p1h:'لماذا هذا المقترح؟',
       p1t:'تمتد عقود بناء السكن الخاص لفترات طويلة، وتتغير خلالها الأعمال والدفعات. وكثيراً ما تتوزع المستندات بين تطبيقات المراسلة والإيصالات والاتفاقات الشفهية، فإذا نشأ خلاف احتاجت المحكمة وأهل الخبرة إلى مستندات موحدة ومؤرخة.',
       q1:'من وافق على تعديل الكميات؟', q2:'متى سُدِّدت الدفعة الثالثة؟', q3:'هل أُرسل إخطار التأخير؟',
@@ -349,9 +374,32 @@ footer{max-width:1040px;margin:auto;padding:0 16px 28px;padding-bottom:max(28px,
       n1:'إخطار بتأخر توريد المواد', n2:'اعتراض على الجدول الزمني', n3:'طلب الموافقة على مادة بديلة',
       sent:'مُرسَل', logged:'مُقيَّد', awaiting:'بانتظار الرد',
       p5n:'تبقى حالة «بانتظار الرد» ظاهرة إلى أن يرد الطرف الآخر أو تنقضي المدة المتفق عليها.',
+      sgh:'المسار المقترح للتوقيع الإلكتروني والربط',
+      sgt:'في الإطلاق التجريبي يعتمد الطرفان العقد داخل المنصة. والمسار المقترح بعده أن يكون الاعتماد توقيعاً إلكترونياً عبر تطبيق «هويتي»، وأن تُتاح الخدمات والإشعارات عبر «سهل». اختر إحدى الخطوات للاطلاع على تفاصيلها:',
+      g1:'استخراج العقد', g1s:'ملف PDF',
+      g2:'توقيع الطرفين', g2s:'عبر «هويتي»',
+      g3:'عقد موقَّع', g3s:'يحمل التوقيعين',
+      g4:'الخدمات والإشعارات', g4s:'عبر «سهل»',
+      sign:[
+        'استخراج العقد: تُخرج المنصة العقد ببنوده كاملة في ملف PDF، بالصورة نفسها التي يراها الطرفان، صالحاً للطباعة والتقديم إلى الجهات.',
+        'توقيع الطرفين: يُرسَل العقد إلى كل طرف في تطبيق «هويتي»، فيراجعه ويوقّعه إلكترونياً. ويتطلب ذلك ربطاً توافق عليه الهيئة العامة للمعلومات المدنية.',
+        'عقد موقَّع: يعود العقد وعليه التوقيعان الإلكترونيان للطرفين، ويُحفظ في السجل المشترك بتاريخه.',
+        'الخدمات والإشعارات: تُتاح خدمات المنصة وتصل إشعاراتها عبر «سهل» للمالك و«سهل أعمال» للمقاول. ويتطلب ذلك تقديم الخدمة عبر جهة حكومية مشاركة فيهما.'
+      ],
+      baseH:'ما يستند إليه المسار',
+      base1:'قانون المعاملات الإلكترونية رقم 20 لسنة 2014، المعدَّل بالمرسوم بقانون رقم 148 لسنة 2025',
+      base2:'تطبيق «هويتي» يتيح التوقيع الإلكتروني للجهات الحكومية والقطاع الخاص',
+      base3:'وزارة العدل تعتمد وسائل إلكترونية لإعلان صحف الدعاوى والأحكام، منها تطبيق «هويتي»',
+      base4:'خدمات تطبيق «سهل» تعمل بمصادقة «هويتي»',
+      needH:'ما يتطلبه',
+      need1:'موافقة الهيئة العامة للمعلومات المدنية على ربط المنصة بخدمات «هويتي»',
+      need2:'جهة حكومية تُقدَّم الخدمة عبرها في «سهل»',
+      need3:'تفعيل كل طرف خدمة التوقيع الإلكتروني في «هويتي»',
+      need4:'دراسة قانونية لأثر التوقيع الإلكتروني على عقد المقاولة، وما يبقى مطلوباً من توثيق',
+      sgw:'تنبيه: هذا مسار مقترح وليس قائماً في النموذج الحالي، ويخضع للدراسة والموافقات اللازمة. وإلى حين تطبيقه لا يغني اعتماد الطرفين داخل المنصة عن التوقيع أو التوثيق المطلوب قانوناً.',
       p6h:'نطاق المقترح وحدوده',
       inH:'يشمل المقترح',
-      in1:'سجلاً مؤرخاً للدفعات والأعمال والتعديلات والإخطارات', in2:'عقداً إلكترونياً نموذجياً يعتمده الطرفان', in3:'الحد من الخلافات وتيسير جمع المستندات لأعمال الخبرة', in4:'إطلاقاً تجريبياً اختيارياً ومجانياً',
+      in1:'سجلاً مؤرخاً للدفعات والأعمال والتعديلات والإخطارات', in2:'عقداً إلكترونياً نموذجياً يعتمده الطرفان', in3:'الحد من الخلافات وتيسير جمع المستندات لأعمال الخبرة', in4:'إطلاقاً تجريبياً اختيارياً ومجانياً', in5:'مساراً مقترحاً لاعتماد العقد بالتوقيع الإلكتروني عبر «هويتي»، بعد موافقة الجهات المختصة',
       outH:'لا يشمل المقترح',
       out1:'إدارة المشاريع الهندسية', out2:'تحديد المسؤولية تلقائياً', out3:'منح حجية قانونية بمجرد الاستخدام', out4:'أي اعتماد رسمي من الجهات الحكومية حتى الآن',
       p6n:'تخضع الحجية القانونية، والربط مع تطبيق «هويتي» ومنصة «سهل» والجهات المعنية بتراخيص البناء، للدراسة والموافقات اللازمة.',
@@ -365,7 +413,7 @@ footer{max-width:1040px;margin:auto;padding:0 16px 28px;padding-bottom:max(28px,
       title:'Aqd Baiti (My Home Contract)',
       sub:'A proposed platform for documenting the contractual relationship between owners and contractors in private housing construction',
       badge:'Illustrative prototype',
-      t1:'The Problem', t2:'How It Works', t3:'Shared Record', t4:'Variations', t5:'Notices', t6:'Scope',
+      t1:'The Problem', t2:'How It Works', t3:'Shared Record', t4:'Variations', t5:'Notices', t6:'Scope', tsg:'Signing & Integration',
       p1h:'Why this proposal?',
       p1t:'Private housing construction contracts run for long periods, during which the works and payments change. Documents are often scattered across messaging apps, receipts and verbal agreements, so when a dispute arises the court and the experts need a single, dated set of records.',
       q1:'Who approved the change in quantities?', q2:'When was the third payment made?', q3:'Was the delay notice sent?',
@@ -408,9 +456,32 @@ footer{max-width:1040px;margin:auto;padding:0 16px 28px;padding-bottom:max(28px,
       n1:'Notice of delayed material supply', n2:'Objection to the schedule', n3:'Request to approve a substitute material',
       sent:'Sent', logged:'Logged', awaiting:'Awaiting response',
       p5n:'The “Awaiting response” status remains visible until the other party responds or the agreed period ends.',
+      sgh:'Proposed path: electronic signature and integration',
+      sgt:'In the pilot, both parties approve the contract inside the platform. The proposed path after that is for approval to become an electronic signature through the Hawiti app, with services and notifications available through Sahel. Select a step to see its details:',
+      g1:'Contract issued', g1s:'As a PDF file',
+      g2:'Both parties sign', g2s:'Through Hawiti',
+      g3:'Signed contract', g3s:'Carrying both signatures',
+      g4:'Services and notifications', g4s:'Through Sahel',
+      sign:[
+        'Contract issued: the platform produces the full contract as a PDF file, in the same form both parties see, ready to print and to submit where needed.',
+        'Both parties sign: the contract is sent to each party in the Hawiti app, where they review it and sign it electronically. This requires an integration approved by the Public Authority for Civil Information.',
+        'Signed contract: the contract comes back carrying both parties’ electronic signatures and is kept in the shared record with its date.',
+        'Services and notifications: the platform’s services and notifications reach the owner through Sahel and the contractor through Sahel Business. This requires the service to be offered through a government entity that takes part in them.'
+      ],
+      baseH:'What the path builds on',
+      base1:'The Electronic Transactions Law No. 20 of 2014, as amended by Decree-Law No. 148 of 2025',
+      base2:'The Hawiti app offers electronic signature to government entities and the private sector',
+      base3:'The Ministry of Justice uses electronic means to serve statements of claim and judgments, including the Hawiti app',
+      base4:'Services in the Sahel app run on Hawiti authentication',
+      needH:'What it requires',
+      need1:'Approval from the Public Authority for Civil Information to link the platform to Hawiti services',
+      need2:'A government entity through which the service is offered in Sahel',
+      need3:'Each party switching on the electronic signature in Hawiti',
+      need4:'A legal study of the effect of an electronic signature on a building contract, and of any notarisation still required',
+      sgw:'Note: this is a proposed path, not part of the current prototype, and it is subject to study and the necessary approvals. Until it is in place, approval by the two parties inside the platform does not replace any signature or notarisation required by law.',
       p6h:'Scope and limits of the proposal',
       inH:'The proposal covers',
-      in1:'A dated record of payments, works, variations and notices', in2:'A standard e-contract approved by both parties', in3:'Fewer disputes and easier document gathering for expert review', in4:'A free, optional pilot launch',
+      in1:'A dated record of payments, works, variations and notices', in2:'A standard e-contract approved by both parties', in3:'Fewer disputes and easier document gathering for expert review', in4:'A free, optional pilot launch', in5:'A proposed path for approving the contract by electronic signature through Hawiti, once the competent authorities agree',
       outH:'The proposal does not cover',
       out1:'Engineering project management', out2:'Automatic assignment of liability', out3:'Legal standing simply by being used', out4:'Any official government endorsement to date',
       p6n:'Legal standing, and integration with the Hawiti app, the Sahel platform and the building-permit authorities, are subject to study and the necessary approvals.',
@@ -463,15 +534,18 @@ footer{max-width:1040px;margin:auto;padding:0 16px 28px;padding-bottom:max(28px,
   var toastEl=document.getElementById('toast'), tt;
   function toast(msg){toastEl.textContent=msg;toastEl.classList.add('show');clearTimeout(tt);tt=setTimeout(function(){toastEl.classList.remove('show')},2200)}
 
-  /* ---------- How it works ---------- */
-  var flowIdx=0;
-  document.querySelectorAll('#flow .step').forEach(function(b){
-    b.addEventListener('click',function(){
-      document.querySelectorAll('#flow .step').forEach(function(x){x.classList.remove('on')});
-      b.classList.add('on'); flowIdx=+b.dataset.i; renderFlow();
+  /* ---------- Step rows: "How it works" and the proposed signing path ---------- */
+  var rows=[{box:'flow', out:'flowText', key:'flow', i:0}, {box:'sign', out:'signText', key:'sign', i:0}];
+  rows.forEach(function(r){
+    var steps=document.querySelectorAll('#'+r.box+' .step');
+    steps.forEach(function(b){
+      b.addEventListener('click',function(){
+        steps.forEach(function(x){x.classList.remove('on')});
+        b.classList.add('on'); r.i=+b.dataset.i; renderFlow();
+      });
     });
   });
-  function renderFlow(){ document.getElementById('flowText').textContent=t('flow')[flowIdx]; }
+  function renderFlow(){ rows.forEach(function(r){ document.getElementById(r.out).textContent=t(r.key)[r.i]; }); }
 
   /* ---------- Payment record ---------- */
   var TOTAL=80000, paid=20000, stages=0;
